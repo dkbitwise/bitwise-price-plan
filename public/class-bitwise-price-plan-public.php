@@ -81,7 +81,9 @@ class Bitwise_Price_Plan_Public {
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'inltel_js', 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/6.4.1/js/intlTelInput.min.js', array( 'jquery' ), '1.0.0', false );
 		wp_enqueue_script( 'bitwise_custom_validate_public_js', 'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js', array( 'jquery' ), '1.0.0', false );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/bitwise-price-plan-public.js', array( 'jquery' ), $this->version, false );
+		wp_register_script( $this->plugin_name.'_public', plugin_dir_url( __FILE__ ) . 'js/bitwise-price-plan-public.js', array( 'jquery' ), $this->version, false );
+        wp_localize_script( $this->plugin_name.'_public', "bitpp_data", array('ajaxurl'=>admin_url('admin-ajax.php')) );
+		wp_enqueue_script( $this->plugin_name.'_public' );
 	}
 
 	public function live_parent_register() {
@@ -179,4 +181,265 @@ class Bitwise_Price_Plan_Public {
 </span>
 		<?php
 	}
+
+	public function bw_course_page() {
+		global $wpdb;
+
+		$mathids           = array( '19096', '19104', '19098', '19100', '19102' );
+		$argsnew           = array(
+			'post_status'     => 'publish',
+			'post_type'       => 'lp_course',
+			'course_category' => 'Math',
+			'posts_per_page'  => '-1',
+			'post__in'        => $mathids, //pass our own post ids to display updated by suresh
+			'orderby'         => 'post__in',
+		);
+		$available_courses = new WP_Query( $argsnew ); //Get all the available courses in our Learnpress ?>
+		<h2 class="bitlive-subject-heads">
+		    <div class="title float-left"><span>Math</span></div>
+		<?php
+
+		/*** Getting all students of current loggin in parent  ***/
+		$bwlive_students            = $wpdb->prefix . 'bwlive_students';
+		$current_user = wp_get_current_user();
+		$user_roles   = $current_user->roles;
+		$student_id = 0;
+		if ( in_array( 'subscriber', $user_roles, true ) ) {
+		    $parent_id = $current_user->ID;
+			$student_details = $wpdb->get_results( "SELECT `student_fname`, `student_lname`, `student_id` FROM $bwlive_students WHERE `parent_id`='$parent_id'", ARRAY_A ); ?>
+			<div class="bitliive-student-select float-right">
+                <label class="select-label">Select Student</label>
+                <select id="bitlive_student_select">
+                    <?php
+                    if (count($student_details) > 0){
+                        $count = 0;
+                        foreach ($student_details as $student_detail){
+                            if ($count < 1){
+                                $student_id = $student_detail['student_id'];
+                            }
+                            $count++;
+                            ?>
+                            <option value="<?php echo $student_detail['student_id']?>"><?php echo $student_detail['student_fname'].' '.$student_detail['student_lname'] ?></option>
+                       <?php }
+                    }else{ ?>
+                        <option value="0">-No Student-</option>
+                    <?php }
+                    ?>
+                </select>
+            </div>
+			<?php
+		}
+		$allcourses = $this->bitlive_get_all_lp_courses($student_id);
+
+		?>
+		</h2>
+        <div id="thim-course-archive" class="thim-course-grid" data-cookie="grid-layout">
+        <?php
+		foreach ( $available_courses->posts as $available_course ) { ?>
+            <div id="post-<?php echo $available_course->ID; ?>" class="course-grid-4 lpr_course post-<?php echo $available_course->ID; ?> lp_course type-lp_course status-publish has-post-thumbnail hentry course_category-physics pmpro-has-access course">
+                <div class="course-item" style="330px;">
+                    <div class="course-thumbnail">
+                        <a class="thumb" href="<?php echo get_permalink( $available_course->ID ); ?>">
+                            <img style="height: 160px!important;" src="<?php echo get_the_post_thumbnail_url( $available_course->ID, 'medium_large' ); ?>" alt="" title="" width="400" height="250">
+                        </a>
+                        <a class="course-readmore" href="<?php echo get_permalink( $available_course->ID ); ?>">Read More</a>
+                    </div>
+                    <div class="thim-course-content">
+                        <h2 class="course-title"><a href="<?php echo get_permalink( $available_course->ID ); ?>" rel="bookmark"><?php echo $available_course->post_title; ?></a></h2>
+                        <div class="course-meta">
+
+							<?php if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
+                                <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                </div>
+							<?php } else { ?>
+                                <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                    <a href="<?php echo get_permalink( $available_course->ID ) . '?enroll-course=' . $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">GET STARTED</a>
+                                </div>
+							<?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		<?php }
+
+		echo '</div>';
+
+		$phyids = array( '19113', '19115', '19117', '19119' );
+
+		$argsnew           = array(
+			'post_status'     => 'publish',
+			'post_type'       => 'lp_course',
+			'course_category' => 'Physics',
+			'posts_per_page'  => '-1',
+			'post__in'        => $phyids, //pass our own post ids to display updated by suresh
+			'orderby'         => 'date',
+		);
+		$available_courses = new WP_Query( $argsnew ); //Get all the available courses in our Learnpress
+
+		echo $output = '<h2 style=" text-align: center; font-size: 29px;font-weight: bold;text-transform: uppercase;">Physics</h2><div id="thim-course-archive" class="thim-course-grid" data-cookie="grid-layout">';
+		foreach ( $available_courses->posts as $available_course ) { ?>
+
+            <div id="post-<?php echo $available_course->ID; ?>" class="course-grid-4 lpr_course post-<?php echo $available_course->ID; ?> lp_course type-lp_course status-publish has-post-thumbnail hentry course_category-physics pmpro-has-access course">
+                <div class="course-item" style="330px;">
+                    <div class="course-thumbnail">
+                        <a class="thumb" href="<?php echo get_permalink( $available_course->ID ); ?>"><img style="height: 160px!important;" src="<?php echo get_the_post_thumbnail_url( $available_course->ID, 'medium_large' ); ?>" alt="" title="" width="400" height="250"></a>
+                        <a class="course-readmore" href="<?php echo get_permalink( $available_course->ID ); ?>">Read More</a>
+                    </div>
+                    <div class="thim-course-content">
+                        <h2 class="course-title"><a href="<?php echo get_permalink( $available_course->ID ); ?>" rel="bookmark"><?php echo $available_course->post_title; ?></a></h2>
+                        <div class="course-meta">
+							<?php if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
+                                <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                </div>
+							<?php } else { ?>
+                                <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">Get Started</a>
+                                </div>
+							<?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<?php
+		}
+		echo '</div>';
+		$chmids = array( '19107', '19109', '19111' );
+
+		$argsnew           = array(
+			'post_status'     => 'publish',
+			'post_type'       => 'lp_course',
+			'course_category' => 'Chemistry',
+			'post__in'        => $chmids, //pass our own post ids to display updated by suresh
+			'orderby'         => 'date',
+			'posts_per_page'  => '-1'
+		);
+		$available_courses = new WP_Query( $argsnew ); //Get all the available courses in our Learnpress
+		echo $output = '<h2 style=" text-align: center; font-size: 29px;font-weight: bold;text-transform: uppercase;">Chemistry</h2><div id="thim-course-archive" class="thim-course-grid" data-cookie="grid-layout">';
+		foreach ( $available_courses->posts as $available_course ) { ?>
+
+            <div id="post-<?php echo $available_course->ID; ?>" class="course-grid-4 lpr_course post-<?php echo $available_course->ID; ?> lp_course type-lp_course status-publish has-post-thumbnail hentry course_category-physics pmpro-has-access course">
+                <div class="course-item" style="330px;">
+                    <div class="course-thumbnail">
+                        <a class="thumb" href="<?php echo get_permalink( $available_course->ID ); ?>"><img style="height: 160px!important;" src="<?php echo get_the_post_thumbnail_url( $available_course->ID, 'medium_large' ); ?>" alt="" title="" width="400" height="250"></a>
+                        <a class="course-readmore" href="<?php echo get_permalink( $available_course->ID ); ?>">Read More</a>
+                    </div>
+                    <div class="thim-course-content">
+                        <h2 class="course-title"><a href="<?php echo get_permalink( $available_course->ID ); ?>" rel="bookmark"><?php echo $available_course->post_title; ?></a></h2>
+                        <div class="course-meta">
+							<?php if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
+                                <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                </div>
+							<?php } else { ?>
+                                <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">Get Started</a>
+                                </div>
+							<?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		<?php }
+		echo '</div>';
+		$bioids            = array( '19092', '19094' );
+		$argsnew           = array(
+			'post_status'     => 'publish',
+			'post_type'       => 'lp_course',
+			'course_category' => 'Biology',
+
+			'post__in'       => $bioids, //pass our own post ids to display updated by suresh
+			'orderby'        => 'date',
+			'posts_per_page' => '-1'
+		);
+		$available_courses = new WP_Query( $argsnew ); //Get all the available courses in our Learnpress
+		echo $output = '<h2 style=" text-align: center; font-size: 29px;font-weight: bold;text-transform: uppercase;">Biology</h2><div id="thim-course-archive" class="thim-course-grid" data-cookie="grid-layout">';
+		foreach ( $available_courses->posts as $available_course ) { ?>
+            <div id="post-<?php echo $available_course->ID; ?>" class="course-grid-4 lpr_course post-<?php echo $available_course->ID; ?> lp_course type-lp_course status-publish has-post-thumbnail hentry course_category-physics pmpro-has-access course">
+                <div class="course-item" style="330px;">
+                    <div class="course-thumbnail">
+                        <a class="thumb" href="<?php echo get_permalink( $available_course->ID ); ?>"><img style="height: 160px!important;" src="<?php echo get_the_post_thumbnail_url( $available_course->ID, 'medium_large' ); ?>" alt="" title="" width="400" height="250"></a>
+                        <a class="course-readmore" href="<?php echo get_permalink( $available_course->ID ); ?>">Read More</a>
+                    </div>
+                    <div class="thim-course-content">
+                        <h2 class="course-title"><a href="<?php echo get_permalink( $available_course->ID ); ?>" rel="bookmark"><?php echo $available_course->post_title; ?></a></h2>
+                        <div class="course-meta">
+							<?php if ( isset( $allcourses ) ) {
+								if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
+                                    <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                        <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                    </div>
+								<?php } else { ?>
+                                    <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                        <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">Get Started</a>
+                                    </div>
+								<?php }
+							} ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		<?php }
+		echo '</div>';
+	}
+
+	/**
+     * Handle ajax request for course puachase status
+    */
+    public function bookme_course_purchase_status(){
+        global $wpdb;
+        $posted_data = isset($_POST)?wc_clean($_POST):[];
+        $student_id = $posted_data['student_id'];
+
+        $student_courses = $this->bitlive_get_all_lp_courses($student_id);
+
+        wp_send_json($student_courses);
+    }
+
+    /**
+    * @param $student_id
+     *
+     * @return array
+     */
+    public function bitlive_get_all_lp_courses($student_id){
+        global $wpdb;
+        $allcourses  = [];
+
+        $customer_orders = $this->bitlive_get_all_customer_orders();
+
+		foreach ( $customer_orders as $customer_order ) {
+			$orderq        = wc_get_order( $customer_order );
+
+			$order        = new WC_Order( $orderq->get_id() );
+			$items        = $order->get_items();
+			$mappingtable = $wpdb->prefix . 'course_mapping';
+
+			foreach ( $items as $item ) {
+			    $bookme_data = isset($item['bookme'])?$item['bookme']:[];
+				$order_student_id = isset($bookme_data['student'])?$bookme_data['student']:0;
+				if ($order_student_id !== $student_id){
+				    continue;
+				}
+
+				$product_id   = $item['product_id'];
+				$ordercourses = $wpdb->get_results( "SELECT course_id FROM $mappingtable WHERE `product_ids` LIKE '%$product_id%'" );
+				$allcourses[] = $ordercourses[0]->course_id;
+			}
+		}
+
+		return $allcourses;
+    }
+
+    public function bitlive_get_all_customer_orders(){
+        return get_posts( array(
+			'numberposts' => - 1,
+			'meta_key'    => '_customer_user',
+			'orderby'     => 'date',
+			'order'       => 'DESC',
+			'meta_value'  => get_current_user_id(),
+			'post_type'   => wc_get_order_types(),
+			'post_status' => array_keys( wc_get_is_paid_statuses() ),
+		) );
+    }
 }

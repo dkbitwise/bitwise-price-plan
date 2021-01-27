@@ -35,7 +35,7 @@ class Bitwise_Price_Plan {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Bitwise_Price_Plan_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Bitwise_Price_Plan_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -44,7 +44,7 @@ class Bitwise_Price_Plan {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -53,7 +53,7 @@ class Bitwise_Price_Plan {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string $version The current version of the plugin.
 	 */
 	protected $version;
 
@@ -78,7 +78,6 @@ class Bitwise_Price_Plan {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -178,16 +177,19 @@ class Bitwise_Price_Plan {
 
 		/*Register page shortcode*/
 		$this->loader->add_shortcode( 'bw_register', $plugin_public, 'live_parent_register' );
-                $this->loader->add_shortcode( 'bw_profile', $plugin_public, 'live_parent_profile' );
-                $this->loader->add_shortcode( 'bw_toolbar', $plugin_public, 'live_toolbar' );
-                $this->loader->add_shortcode( 'bw_password', $plugin_public, 'live_parent_password' );
-                $this->loader->add_shortcode( 'bw_student', $plugin_public, 'live_parent_addstudent' );
+		$this->loader->add_shortcode( 'bw_profile', $plugin_public, 'live_parent_profile' );
+		$this->loader->add_shortcode( 'bw_toolbar', $plugin_public, 'live_toolbar' );
+		$this->loader->add_shortcode( 'bw_password', $plugin_public, 'live_parent_password' );
+		$this->loader->add_shortcode( 'bw_student', $plugin_public, 'live_parent_addstudent' );
+		$this->loader->add_shortcode( 'bw_course_page', $plugin_public, 'bw_course_page' );
 
-		$this->loader->add_action('wp_ajax_username_check', $plugin_public, 'username_check');
-        	$this->loader->add_action('wp_ajax_nopriv_username_check', $plugin_public, 'username_check');
-		$this->loader->add_action('wp_ajax_useremail_check', $plugin_public, 'useremail_check');
-        	$this->loader->add_action('wp_ajax_nopriv_useremail_check', $plugin_public, 'useremail_check');
+		$this->loader->add_action( 'wp_ajax_username_check', $plugin_public, 'username_check' );
+		$this->loader->add_action( 'wp_ajax_nopriv_username_check', $plugin_public, 'username_check' );
+		$this->loader->add_action( 'wp_ajax_useremail_check', $plugin_public, 'useremail_check' );
+		$this->loader->add_action( 'wp_ajax_nopriv_useremail_check', $plugin_public, 'useremail_check' );
 
+		$this->loader->add_action( 'wp_ajax_course_purchase_status', $plugin_public, 'bookme_course_purchase_status' );
+		$this->loader->add_action( 'wp_ajax_nopriv_course_purchase_status', $plugin_public, 'bookme_course_purchase_status' );
 	}
 
 	/**
@@ -203,8 +205,8 @@ class Bitwise_Price_Plan {
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
@@ -213,8 +215,8 @@ class Bitwise_Price_Plan {
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    Bitwise_Price_Plan_Loader    Orchestrates the hooks of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -223,8 +225,8 @@ class Bitwise_Price_Plan {
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_version() {
 		return $this->version;

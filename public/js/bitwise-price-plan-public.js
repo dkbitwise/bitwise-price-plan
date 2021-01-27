@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     'use strict';
     /**
      * All of the code for your public-facing JavaScript source
@@ -34,7 +34,7 @@
      *param $phone
      */
     function validatePhone($phone) {
-        
+
         var a = $phone;
         var filter = /^\d{10}$/;
         //var filter = /^(\+91-|\+91|0)?\d{10}$/;
@@ -43,7 +43,7 @@
         } else {
             return 0;
         }
-        
+
     }
 
     /*
@@ -52,37 +52,29 @@
      *param string $email
      */
     function validateEmail($email) {
-    	
+
         var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailReg.test($email);
-        
+
     }
-    
+
     function allowedEmaildomain($email) {
-    	
-    	var eml = $email;
-		var ed = eml.split('@');
-		
-		if(ed[1])
-		{
-			var em = ed[1].split('.').slice(1);
-			if(!em)
-			{
-				return 0;
-			}
-			else if(em == 'com' || em == 'net' || em == 'edu')
-			{
-				return 1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else
-		{
-			return 0;
-		}
+
+        var eml = $email;
+        var ed = eml.split('@');
+
+        if (ed[1]) {
+            var em = ed[1].split('.').slice(1);
+            if (!em) {
+                return 0;
+            } else if (em == 'com' || em == 'net' || em == 'edu') {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
     }
 
     /*
@@ -118,14 +110,14 @@
             type: "POST",
             url: ajaxurl,
             data: data,
-            success: function(response) {
+            success: function (response) {
                 res = response;
             },
             async: false /*this turns it into synchronous*/
         });
         return res;
     }
-    
+
     function userexist_stu($email) {
         var ajaxurl = window.location.origin + "/wp-admin/admin-ajax.php";
         var data = {
@@ -138,12 +130,12 @@
             type: "POST",
             url: ajaxurl,
             data: data,
-            success: function(response) {
+            success: function (response) {
                 res = response;
             },
             async: false /*this turns it into synchronous*/
         });
-        return res;    	
+        return res;
     }
 
     function usernameexist($uname) {
@@ -158,7 +150,7 @@
             type: "POST",
             url: ajaxurl,
             data: data,
-            success: function(response) {
+            success: function (response) {
                 res = response;
             },
             async: false /*this turns it into synchronous*/
@@ -181,12 +173,12 @@
             return 0;
         }
     }
+
     /*check minimum length end*/
 
     /*check password and confirm password same or not . Updated by suresh*/
     function checkpasswordmatch() {
-        if(!$('#passw2').val())
-        {
+        if (!$('#passw2').val()) {
             $(".password2-error").css('display', 'block');
         } else if ($('#passw2').val() != $('#passw1').val()) {
             $(".password2-error").text('Please enter same password');
@@ -204,67 +196,57 @@
 
         return true;
     }
-    
-    function checkEmail($email,$id) {
+
+    function checkEmail($email, $id) {
 
         var did = $("#add-stu").data("id");
-		if($id == 'parentemail')
-		{
-			var error_class = "parent_email";	
-			var email1 = $("#user_email1").val();	
-			var email2 = $("#user_email2").val();	
-		}
-		else if($id == 'user_email1')
-		{
-			var error_class = "user_email1";	
-			var email1 = $("#parentemail").val();	
-			var email2 = $("#user_email2").val();	
-		}
-		else
-		{
-			var error_class = "user_email2";	
-			var email1 = $("#parentemail").val();	
-			var email2 = $("#user_email1").val();	
-		}
-		console.log("."+error_class+"-error");
-		var usercheck = userexist($email);
+        if ($id == 'parentemail') {
+            var error_class = "parent_email";
+            var email1 = $("#user_email1").val();
+            var email2 = $("#user_email2").val();
+        } else if ($id == 'user_email1') {
+            var error_class = "user_email1";
+            var email1 = $("#parentemail").val();
+            var email2 = $("#user_email2").val();
+        } else {
+            var error_class = "user_email2";
+            var email1 = $("#parentemail").val();
+            var email2 = $("#user_email1").val();
+        }
+        console.log("." + error_class + "-error");
+        var usercheck = userexist($email);
         if (usercheck == 1) {
-			var er = 1;
-            $("."+error_class+"-error").text('Email address already exist');
+            var er = 1;
+            $("." + error_class + "-error").text('Email address already exist');
         } else if (email1 == $email) {
-			var er = 1;
-            $("."+error_class+"-error").text('Enter different email address');
-		} else {
-			if(did == 2)
-			{
-				if ($email == email2) {
-					var er = 1;
-		            $("."+error_class+"-error").text('Enter different email address');
-        		}
-        		else
-        		{
-					var er = 0;
-		            $("."+error_class+"-error").text('Enter valid email address');
-        		}
-			}
-			else
-			{
-				var er = 0;
-		        $("."+error_class+"-error").text('Enter valid email address');
-			}
+            var er = 1;
+            $("." + error_class + "-error").text('Enter different email address');
+        } else {
+            if (did == 2) {
+                if ($email == email2) {
+                    var er = 1;
+                    $("." + error_class + "-error").text('Enter different email address');
+                } else {
+                    var er = 0;
+                    $("." + error_class + "-error").text('Enter valid email address');
+                }
+            } else {
+                var er = 0;
+                $("." + error_class + "-error").text('Enter valid email address');
+            }
         }
         return er;
-    	
+
     }
 
-    $(document).ready(function() {
-	    	
-    	$('.country').click(function(){
-			var code = $(this).attr("data-country-code");
-			$("#co_code").val(code);
-    	});
-    	
-        $("#parentfname").on('keyup keydown change', function() {
+    $(document).ready(function () {
+
+        $('.country').click(function () {
+            var code = $(this).attr("data-country-code");
+            $("#co_code").val(code);
+        });
+
+        $("#parentfname").on('keyup keydown change', function () {
 
             if (!$('#parentfname').val()) {
                 $(".parent_f_name-error").css('display', 'block');
@@ -275,7 +257,7 @@
 
         });
 
-        $("#parentlname").on('keyup keydown change', function() {
+        $("#parentlname").on('keyup keydown change', function () {
 
             if (!$('#parentlname').val()) {
                 $(".parent_l_name-error").css('display', 'block');
@@ -286,179 +268,152 @@
 
         });
 
-		/*User Name on Change*/
-		$("#user_login").on('keyup keydown change', function(e) {
+        /*User Name on Change*/
+        $("#user_login").on('keyup keydown change', function (e) {
 
             if (!$('#user_login').val()) {
                 $("#regsubmit").prop("disabled", true);
-				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".user_login-error").css('display', 'block');
                 $("#user_login").focus();
             } else {
-            	/*Only on onchange*/
-            	if(e.type === 'change')
-            	{
-	            	var namecheck = usernameexist($("#user_login").val());
-	            	if (namecheck == 1) {
-						$(this).attr("data-ref",1);
-						$(this).attr("data-reval",1);
-	                    $(".user_login-error").text('Username already exist');
-	                    $(".user_login-error").css("display", "block");
-	                	$("#user_login").focus();
-	                } else {
-						$(this).attr("data-ref",0);
-	                    $(".user_login-error").hide();
-	                }
-            	}
-            	else
-            	{
-            		var reval = $(this).attr("data-reval");
-					if(reval == 1)
-					{
-		            	var namecheck = usernameexist($("#user_login").val());
-		            	if (namecheck == 1) {
-							$(this).attr("data-ref",1);
-							$(this).attr("data-reval",1);
-		                    $(".user_login-error").text('Username already exist');
-		                    $(".user_login-error").css("display", "block");
-		                	$("#user_login").focus();
-		                } else {
-							$(this).attr("data-ref",0);
-							$(this).attr("data-reval",0);
-		                    $(".user_login-error").hide();
-		                }
-					}
-					else
-					{
-						$(".user_login-error").hide();
-					}
-            	}
-            	
-            }
-            
-        	var refr = $(this).attr("data-ref");
-			if(refr == 0)
-			{
-				$("#regsubmit").prop("disabled", false);
-			}
-			else
-			{
-				$("#regsubmit").prop("disabled", true);
-			}
+                /*Only on onchange*/
+                if (e.type === 'change') {
+                    var namecheck = usernameexist($("#user_login").val());
+                    if (namecheck == 1) {
+                        $(this).attr("data-ref", 1);
+                        $(this).attr("data-reval", 1);
+                        $(".user_login-error").text('Username already exist');
+                        $(".user_login-error").css("display", "block");
+                        $("#user_login").focus();
+                    } else {
+                        $(this).attr("data-ref", 0);
+                        $(".user_login-error").hide();
+                    }
+                } else {
+                    var reval = $(this).attr("data-reval");
+                    if (reval == 1) {
+                        var namecheck = usernameexist($("#user_login").val());
+                        if (namecheck == 1) {
+                            $(this).attr("data-ref", 1);
+                            $(this).attr("data-reval", 1);
+                            $(".user_login-error").text('Username already exist');
+                            $(".user_login-error").css("display", "block");
+                            $("#user_login").focus();
+                        } else {
+                            $(this).attr("data-ref", 0);
+                            $(this).attr("data-reval", 0);
+                            $(".user_login-error").hide();
+                        }
+                    } else {
+                        $(".user_login-error").hide();
+                    }
+                }
 
-    	});
-        
-        $('#passw1').on('keyup keydown change', function() {
+            }
+
+            var refr = $(this).attr("data-ref");
+            if (refr == 0) {
+                $("#regsubmit").prop("disabled", false);
+            } else {
+                $("#regsubmit").prop("disabled", true);
+            }
+
+        });
+
+        $('#passw1').on('keyup keydown change', function () {
             checkminlength($(this).val());
         });
-        
-        $('#passw2').on('keyup change', function() {
+
+        $('#passw2').on('keyup change', function () {
             checkpasswordmatch();
         });
-        
-        $("#parentemail").on('keyup keydown change', function(e) {
-        	
-        	var did = $("#add-stu").data("id");
-        	if (!$('#parentemail').val()) {
-				$(this).attr("data-ref",1);
+
+        $("#parentemail").on('keyup keydown change', function (e) {
+
+            var did = $("#add-stu").data("id");
+            if (!$('#parentemail').val()) {
+                $(this).attr("data-ref", 1);
                 $(".parent_email-error").css('display', 'block');
                 $("#parentemail").focus();
             } else if (!validateEmail($('#parentemail').val())) {
-				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".parent_email-error").text('Enter valid Email address');
                 $(".parent_email-error").css('display', 'block');
                 $("#parentemail").focus();
             } else {
-				$(this).attr("data-ref",0);
-				var ref = $(this).attr("data-ref");
-            	/*Only on onchange*/
-            	if(e.type === 'change')
-            	{
-            		if(checkEmail($("#parentemail").val(),this.id) == 1)
-            		{
-						$(this).attr("data-ref",1);
-						$(this).attr("data-reval",1);
-		                $(".parent_email-error").css('display', 'block');
-		                $("#parentemail").focus();
-            		}
-            		else
-            		{
-						$(this).attr("data-ref",0);
-						$(this).attr("data-reval",0);
-						$(".parent_email-error").hide();
-            		}
-            	}
-            	else
-            	{
-		        	var reval = $(this).attr("data-reval");
-		        	if(reval == 1)
-		        	{
-	            		if(checkEmail($("#parentemail").val(),this.id) == 1)
-	            		{
-							$(this).attr("data-ref",1);
-							$(this).attr("data-reval",1);
-			                $(".parent_email-error").css('display', 'block');
-			                $("#parentemail").focus();
-	            		}
-	            		else
-	            		{
-							$(this).attr("data-ref",0);
-							$(this).attr("data-reval",0);
-							$(".parent_email-error").hide();
-	            		}
-		        	}
-		        	else
-		        	{
-						$(this).attr("data-ref",0);
-						$(".parent_email-error").hide();
-		        	}
-            	}
+                $(this).attr("data-ref", 0);
+                var ref = $(this).attr("data-ref");
+                /*Only on onchange*/
+                if (e.type === 'change') {
+                    if (checkEmail($("#parentemail").val(), this.id) == 1) {
+                        $(this).attr("data-ref", 1);
+                        $(this).attr("data-reval", 1);
+                        $(".parent_email-error").css('display', 'block');
+                        $("#parentemail").focus();
+                    } else {
+                        $(this).attr("data-ref", 0);
+                        $(this).attr("data-reval", 0);
+                        $(".parent_email-error").hide();
+                    }
+                } else {
+                    var reval = $(this).attr("data-reval");
+                    if (reval == 1) {
+                        if (checkEmail($("#parentemail").val(), this.id) == 1) {
+                            $(this).attr("data-ref", 1);
+                            $(this).attr("data-reval", 1);
+                            $(".parent_email-error").css('display', 'block');
+                            $("#parentemail").focus();
+                        } else {
+                            $(this).attr("data-ref", 0);
+                            $(this).attr("data-reval", 0);
+                            $(".parent_email-error").hide();
+                        }
+                    } else {
+                        $(this).attr("data-ref", 0);
+                        $(".parent_email-error").hide();
+                    }
+                }
             }
 
-        	var refr = $(this).attr("data-ref");
-			if(refr == 0)
-			{
-				$("#regsubmit").prop("disabled", false);
-			}
-			else
-			{
-				$("#regsubmit").prop("disabled", true);
-			}
+            var refr = $(this).attr("data-ref");
+            if (refr == 0) {
+                $("#regsubmit").prop("disabled", false);
+            } else {
+                $("#regsubmit").prop("disabled", true);
+            }
 
         });
-        
-        $("#parentcnfemail").on('keyup keydown change', function() {
+
+        $("#parentcnfemail").on('keyup keydown change', function () {
 
             if ($('#parentcnfemail').val() != $('#parentemail').val()) {
-				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".confirmemail-error").text('Please enter same email address');
                 $(".confirmemail-error").css('display', 'block');
                 $("#parentcnfemail").focus();
             } else if (!$('#parentcnfemail').val()) {
-				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".confirmemail-error").text('Please Enter Email Address');
                 $(".confirmemail-error").css('display', 'block');
                 $("#parentcnfemail").focus();
             } else {
-				$(this).attr("data-ref",0);
+                $(this).attr("data-ref", 0);
                 $(".confirmemail-error").hide();
             }
 
-        	var refr = $(this).attr("data-ref");
-			if(refr == 0)
-			{
-				$("#regsubmit").prop("disabled", false);
-			}
-			else
-			{
-				$("#regsubmit").prop("disabled", true);
-			}
-            
+            var refr = $(this).attr("data-ref");
+            if (refr == 0) {
+                $("#regsubmit").prop("disabled", false);
+            } else {
+                $("#regsubmit").prop("disabled", true);
+            }
+
         });
 
 
-        $("#first_name").on('keyup keydown change', function() {
-			
+        $("#first_name").on('keyup keydown change', function () {
+
             if (!$('#first_name').val()) {
                 $(".first_name-error").css('display', 'block');
                 $("#first_name").focus();
@@ -468,7 +423,7 @@
 
         });
 
-        $("#last_name").on('keyup keydown change', function() {
+        $("#last_name").on('keyup keydown change', function () {
 
             if (!$('#last_name').val()) {
                 $(".last_name-error").css('display', 'block');
@@ -479,103 +434,83 @@
 
         });
 
-        $("#user_email1").on('keyup keydown change', function(e) {
-        	
-        	var did = $("#add-stu").data("id");
-        	if (!$('#user_email1').val()) {
-				$(this).attr("data-ref",1);
+        $("#user_email1").on('keyup keydown change', function (e) {
+
+            var did = $("#add-stu").data("id");
+            if (!$('#user_email1').val()) {
+                $(this).attr("data-ref", 1);
                 $(".user_email1-error").css('display', 'block');
                 $("#user_email1").focus();
             } else if (!validateEmail($('#user_email1').val())) {
-				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".user_email1-error").text('Enter valid Email address');
                 $("#user_email1").focus();
                 $(".user_email1-error").css('display', 'block');
             } else {
 
-				$(this).attr("data-ref",0);
-				var ref = $(this).attr("data-ref");
-            	if(e.type === 'change') {
+                $(this).attr("data-ref", 0);
+                var ref = $(this).attr("data-ref");
+                if (e.type === 'change') {
 
-            		if(allowedEmaildomain($('#user_email1').val()) == 1)
-                	{
-	            		if(checkEmail($("#user_email1").val(),this.id) == 1)
-	            		{
-							$(this).attr("data-ref",1);
-							$(this).attr("data-reval",1);
-			                $(".user_email1-error").css('display', 'block');
-			                $("#user_email1").focus();
-	            		}
-	            		else
-	            		{
-							$(this).attr("data-ref",0);
-							$(this).attr("data-reval",0);
-							$(".user_email1-error").hide();
-	            		}
-                	}
-                	else
-                	{
-            			$(this).attr("data-ref",1);
-						$(this).attr("data-reval",1);
-		                $(".user_email1-error").css("display", "block");
-                		$(".user_email1-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
-                		$("#user_email1").focus();
-                	}
-                	
-            	}
-            	else
-            	{
-		        	var reval = $(this).attr("data-reval");
-		        	if(reval == 1)
-		        	{
-	            		if(allowedEmaildomain($('#user_email1').val()) == 1)
-	                	{
-		            		if(checkEmail($("#user_email1").val(),this.id) == 1)
-		            		{
-								$(this).attr("data-ref",1);
-								$(this).attr("data-reval",1);
-				                $(".user_email1-error").css('display', 'block');
-				                $("#user_email1").focus();
-		            		}
-		            		else
-		            		{
-								$(this).attr("data-ref",0);
-								$(this).attr("data-reval",0);
-								$(".user_email1-error").hide();
-		            		}
-	                	}
-	                	else
-	                	{
-	            			$(this).attr("data-ref",1);
-							$(this).attr("data-reval",1);
-			                $(".user_email1-error").css("display", "block");
-	                		$(".user_email1-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
-	                		$("#user_email1").focus();
-	                	}
-		        	}
-		        	else
-		        	{
-						$(this).attr("data-ref",0);
-		            	$(".user_email1-error").hide();
-		        	}
-            	}
+                    if (allowedEmaildomain($('#user_email1').val()) == 1) {
+                        if (checkEmail($("#user_email1").val(), this.id) == 1) {
+                            $(this).attr("data-ref", 1);
+                            $(this).attr("data-reval", 1);
+                            $(".user_email1-error").css('display', 'block');
+                            $("#user_email1").focus();
+                        } else {
+                            $(this).attr("data-ref", 0);
+                            $(this).attr("data-reval", 0);
+                            $(".user_email1-error").hide();
+                        }
+                    } else {
+                        $(this).attr("data-ref", 1);
+                        $(this).attr("data-reval", 1);
+                        $(".user_email1-error").css("display", "block");
+                        $(".user_email1-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
+                        $("#user_email1").focus();
+                    }
+
+                } else {
+                    var reval = $(this).attr("data-reval");
+                    if (reval == 1) {
+                        if (allowedEmaildomain($('#user_email1').val()) == 1) {
+                            if (checkEmail($("#user_email1").val(), this.id) == 1) {
+                                $(this).attr("data-ref", 1);
+                                $(this).attr("data-reval", 1);
+                                $(".user_email1-error").css('display', 'block');
+                                $("#user_email1").focus();
+                            } else {
+                                $(this).attr("data-ref", 0);
+                                $(this).attr("data-reval", 0);
+                                $(".user_email1-error").hide();
+                            }
+                        } else {
+                            $(this).attr("data-ref", 1);
+                            $(this).attr("data-reval", 1);
+                            $(".user_email1-error").css("display", "block");
+                            $(".user_email1-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
+                            $("#user_email1").focus();
+                        }
+                    } else {
+                        $(this).attr("data-ref", 0);
+                        $(".user_email1-error").hide();
+                    }
+                }
 
             }
 
-        	var refr = $(this).attr("data-ref");
-			if(refr == 0)
-			{
-				$("#regsubmit").prop("disabled", false);
-			}
-			else
-			{
-				$("#regsubmit").prop("disabled", true);
-			}
-            
+            var refr = $(this).attr("data-ref");
+            if (refr == 0) {
+                $("#regsubmit").prop("disabled", false);
+            } else {
+                $("#regsubmit").prop("disabled", true);
+            }
+
         });
 
-        $("#first_name1").on('keyup keydown change', function() {
-            
+        $("#first_name1").on('keyup keydown change', function () {
+
             if (!$('#first_name1').val()) {
                 $(".first_name1-error").css('display', 'block');
                 $("#first_name1").focus();
@@ -585,7 +520,7 @@
 
         });
 
-        $("#last_name1").on('keyup keydown change', function() {
+        $("#last_name1").on('keyup keydown change', function () {
 
             if (!$('#last_name1').val()) {
                 $(".last_name1-error").css('display', 'block');
@@ -596,104 +531,84 @@
 
         });
 
-        $("#user_email2").on('keyup keydown', function(e) {
-            
-        	var did = $("#add-stu").data("id");
+        $("#user_email2").on('keyup keydown', function (e) {
+
+            var did = $("#add-stu").data("id");
             if (!$('#user_email2').val()) {
- 				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".user_email2-error").css('display', 'block');
                 $("#user_email2").focus();
             } else if (!validateEmail($('#user_email2').val())) {
-				$(this).attr("data-ref",1);
+                $(this).attr("data-ref", 1);
                 $(".user_email2-error").text('Enter valid Email address');
                 $("#user_email2").focus();
                 $(".user_email2-error").css('display', 'block');
             } else {
 
-				$(this).attr("data-ref",0);
-				var ref = $(this).attr("data-ref");
-            	if(e.type === 'change') {
-            		
-            		if(allowedEmaildomain($('#user_email2').val()) == 0)
-                	{
-	            		if(checkEmail($("#user_email2").val(),this.id) == 1)
-	            		{
-							$(this).attr("data-ref",1);
-							$(this).attr("data-reval",1);
-			                $(".user_email2-error").css('display', 'block');
-			                $("#user_email2").focus();
-	            		}
-	            		else
-	            		{
-							$(this).attr("data-ref",0);
-							$(this).attr("data-reval",0);
-							$(".user_email2-error").hide();
-	            		}
-                	}
-                	else
-                	{
-            			$(this).attr("data-ref",1);
-						$(this).attr("data-reval",1);
-		                $(".user_email2-error").css("display", "block");
-                		$(".user_email2-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
-                		$("#user_email2").focus();
-                	}
-            	}
-            	else
-            	{
-		        	var reval = $(this).attr("data-reval");
-		        	if(reval == 1)
-		        	{
-		        		
-	            		if(allowedEmaildomain($('#user_email2').val()) == 0)
-	                	{
-		            		if(checkEmail($("#user_email2").val(),this.id) == 1)
-		            		{
-								$(this).attr("data-ref",1);
-								$(this).attr("data-reval",1);
-				                $(".user_email2-error").css('display', 'block');
-				                $("#user_email2").focus();
-		            		}
-		            		else
-		            		{
-								$(this).attr("data-ref",0);
-								$(this).attr("data-reval",0);
-								$(".user_email2-error").hide();
-		            		}
-	                	}
-	                	else
-	                	{
-	            			$(this).attr("data-ref",1);
-							$(this).attr("data-reval",1);
-			                $(".user_email2-error").css("display", "block");
-	                		$(".user_email2-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
-	                		$("#user_email2").focus();
-	                	}
+                $(this).attr("data-ref", 0);
+                var ref = $(this).attr("data-ref");
+                if (e.type === 'change') {
 
-		        	}
-		        	else
-		        	{
-						$(this).attr("data-ref",0);
-	            		$(".user_email2-error").hide();
-		        	}
-            	}
+                    if (allowedEmaildomain($('#user_email2').val()) == 0) {
+                        if (checkEmail($("#user_email2").val(), this.id) == 1) {
+                            $(this).attr("data-ref", 1);
+                            $(this).attr("data-reval", 1);
+                            $(".user_email2-error").css('display', 'block');
+                            $("#user_email2").focus();
+                        } else {
+                            $(this).attr("data-ref", 0);
+                            $(this).attr("data-reval", 0);
+                            $(".user_email2-error").hide();
+                        }
+                    } else {
+                        $(this).attr("data-ref", 1);
+                        $(this).attr("data-reval", 1);
+                        $(".user_email2-error").css("display", "block");
+                        $(".user_email2-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
+                        $("#user_email2").focus();
+                    }
+                } else {
+                    var reval = $(this).attr("data-reval");
+                    if (reval == 1) {
+
+                        if (allowedEmaildomain($('#user_email2').val()) == 0) {
+                            if (checkEmail($("#user_email2").val(), this.id) == 1) {
+                                $(this).attr("data-ref", 1);
+                                $(this).attr("data-reval", 1);
+                                $(".user_email2-error").css('display', 'block');
+                                $("#user_email2").focus();
+                            } else {
+                                $(this).attr("data-ref", 0);
+                                $(this).attr("data-reval", 0);
+                                $(".user_email2-error").hide();
+                            }
+                        } else {
+                            $(this).attr("data-ref", 1);
+                            $(this).attr("data-reval", 1);
+                            $(".user_email2-error").css("display", "block");
+                            $(".user_email2-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
+                            $("#user_email2").focus();
+                        }
+
+                    } else {
+                        $(this).attr("data-ref", 0);
+                        $(".user_email2-error").hide();
+                    }
+                }
 
             }
 
-        	var refr = $(this).attr("data-ref");
-			if(refr == 0)
-			{
-				$("#regsubmit").prop("disabled", false);
-			}
-			else
-			{
-				$("#regsubmit").prop("disabled", true);
-			}
-            
+            var refr = $(this).attr("data-ref");
+            if (refr == 0) {
+                $("#regsubmit").prop("disabled", false);
+            } else {
+                $("#regsubmit").prop("disabled", true);
+            }
+
         });
-        
-        $("#first_name2").on('keyup keydown change', function() {
-            
+
+        $("#first_name2").on('keyup keydown change', function () {
+
             if (!$('#first_name2').val()) {
                 $(".first_name2-error").css('display', 'block');
                 $("#first_name2").focus();
@@ -703,7 +618,7 @@
 
         });
 
-        $("#last_name2").on('keyup keydown change', function() {
+        $("#last_name2").on('keyup keydown change', function () {
 
             if (!$('#last_name2').val()) {
                 $(".last_name2-error").css('display', 'block');
@@ -714,8 +629,8 @@
 
         });
 
-        
-       $("#timezone").on('keyup keydown change', function() {
+
+        $("#timezone").on('keyup keydown change', function () {
 
             if (!$('#timezone').val() || $('#timezone').val() == 'NA') {
                 $(".timezone-error").css('display', 'block');
@@ -728,16 +643,15 @@
 
         });
 
-        $('#parent_phone').on('keyup change', function() {
-        	
-        	var pa_phone= $('#parent_phone').val();
-			var pa_ph = pa_phone.match(/\d/g);
-			if(pa_ph != null)
-			{
-				pa_ph = pa_ph.join("");
-			}
-		
-			$('#parent_phone').val(pa_ph);
+        $('#parent_phone').on('keyup change', function () {
+
+            var pa_phone = $('#parent_phone').val();
+            var pa_ph = pa_phone.match(/\d/g);
+            if (pa_ph != null) {
+                pa_ph = pa_ph.join("");
+            }
+
+            $('#parent_phone').val(pa_ph);
             if (!$('#parent_phone').val()) {
                 $("#regsubmit").prop("disabled", true);
                 $(".parent_phone-error").css('display', 'block');
@@ -754,40 +668,38 @@
 
         });
 
-        $('#phone1').on('keyup change', function() {
-          
-        	var st_phone1= $('#phone1').val();
-	    	var st_ph = st_phone1.match(/\d/g);
-			if(st_ph != null)
-			{
-	    		st_ph = st_ph.join("");
-			}
-			
-	        $('#phone1').val(st_ph);
-	        if (!$('#phone1').val()) {
-	            $("#regsubmit").prop("disabled", true);
-	            $(".phone1-error").css('display', 'block');
-	            $("#phone1").focus();
-	        } else if (!validatePhone($('#phone1').val())) {
-	            $("#regsubmit").prop("disabled", true);
-	            $(".phone1-error-msg").text('Please enter valid mobile number');
-	            $(".phone1-error-msg").css('display', 'block');
-	            $("#phone1").focus();
-	        } else {
-	            $("#regsubmit").prop("disabled", false);
-	            $(".phone1-error-msg").css('display', 'none');
-	        }
+        $('#phone1').on('keyup change', function () {
+
+            var st_phone1 = $('#phone1').val();
+            var st_ph = st_phone1.match(/\d/g);
+            if (st_ph != null) {
+                st_ph = st_ph.join("");
+            }
+
+            $('#phone1').val(st_ph);
+            if (!$('#phone1').val()) {
+                $("#regsubmit").prop("disabled", true);
+                $(".phone1-error").css('display', 'block');
+                $("#phone1").focus();
+            } else if (!validatePhone($('#phone1').val())) {
+                $("#regsubmit").prop("disabled", true);
+                $(".phone1-error-msg").text('Please enter valid mobile number');
+                $(".phone1-error-msg").css('display', 'block');
+                $("#phone1").focus();
+            } else {
+                $("#regsubmit").prop("disabled", false);
+                $(".phone1-error-msg").css('display', 'none');
+            }
 
         });
 
-        $('#phone2').on('keyup change', function() {
-          
-        	var st_phone2= $('#phone2').val();
-        	var st_ph = st_phone2.match(/\d/g);
-			if(st_ph != null)
-        	{
-        		st_ph = st_ph.join("");
-        	}
+        $('#phone2').on('keyup change', function () {
+
+            var st_phone2 = $('#phone2').val();
+            var st_ph = st_phone2.match(/\d/g);
+            if (st_ph != null) {
+                st_ph = st_ph.join("");
+            }
 
             $('#phone2').val(st_ph);
             if (!$('#phone2').val()) {
@@ -803,20 +715,16 @@
                 $("#regsubmit").prop("disabled", false);
                 $(".phone2-error-msg").css('display', 'none');
             }
-
         });
 
-		
-		$('#regsubmit').click(function() {
-			
-			var error = 0;
+        $('#regsubmit').click(function () {
+            var error = 0;
+            var did = $("#add-stu").data("id");
+            var user_lo = $("#user_login").attr("data-ref");
+            var parent_em = $("#parentemail").attr("data-ref");
+            var user1_em = $("#user_email1").attr("data-ref");
 
-			var did = $("#add-stu").data("id");
-        	var user_lo = $("#user_login").attr("data-ref");
-        	var parent_em = $("#parentemail").attr("data-ref");
-        	var user1_em = $("#user_email1").attr("data-ref");
-
-			if (!$('#parentfname').val()) {
+            if (!$('#parentfname').val()) {
                 $(".parent_f_name-error").css('display', 'block');
                 $("#parentfname").focus();
                 error = 1;
@@ -831,7 +739,7 @@
             } else {
                 $(".parent_l_name-error").hide();
             }
-            
+
             if (!$('#user_login').val()) {
                 $(".user_login-error").css('display', 'block');
                 $('#user_login').focus()
@@ -839,8 +747,8 @@
             } else {
                 $(".user_login-error").hide();
             }
-			
-			if (!$('#passw1').val()) {
+
+            if (!$('#passw1').val()) {
                 $(".password-error").css('display', 'block');
                 error = 1;
             } else if (checkminlength($("#passw1").val())) {
@@ -859,7 +767,7 @@
             } else {
                 $(".password2-error").hide();
             }
-            
+
             if (!$('#parentcnfemail').val()) {
                 $(".confirmemail-error").css('display', 'block');
                 $("#parentcnfemail").focus();
@@ -877,7 +785,7 @@
             } else {
                 $(".confirmemail-error-msg").hide();
             }
-            
+
             if (!$('#parentemail').val()) {
                 $(".parent_email-error").css('display', 'block');
                 $("#parentemail").focus();
@@ -919,7 +827,7 @@
             } else {
                 $(".last_name1-error").hide();
             }
-            
+
             if (!$('#user_email1').val()) {
                 $(".user_email1-error").css('display', 'block');
                 $("#user_email1").focus();
@@ -935,12 +843,9 @@
                 $(".user_email1-error").css('display', 'block');
                 error = 1;
             } else {
-                if(allowedEmaildomain($('#user_email1').val()))
-                {
+                if (allowedEmaildomain($('#user_email1').val())) {
                     $(".user_email1-error").hide();
-                }
-                else
-                {
+                } else {
                     $(".user_email1-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
                     $("#user_email1").focus();
                     $(".user_email1-error").css('display', 'block');
@@ -961,66 +866,62 @@
                 $(".phone1-error").hide();
             }
 
-			if(did == 2)
-			{
+            if (did == 2) {
 
-	            if (!$('#first_name2').val()) {
-	                $(".first_name2-error").css('display', 'block');
-	                $("#first_name2").focus();
-	                error = 1;
-	            } else {
-	                $(".first_name2-error").hide();
-	            }
-	
-	            if (!$('#last_name2').val()) {
-	                $(".last_name2-error").css('display', 'block');
-	                $('#last_name2').focus()
-	                error = 1;
-	            } else {
-	                $(".last_name2-error").hide();
-	            }
-	            
-	            if (!$('#user_email2').val()) {
-	                $(".user_email2-error").css('display', 'block');
-	                $("#user_email2").focus();
-	                error = 1;
-	            } else if (!validateEmail($('#user_email2').val())) {
-	                $(".user_email2-error").text('Enter valid Email address');
-	                $("#user_email2").focus();
-	                $(".user_email2-error").css('display', 'block');
-	                error = 1;
-	            } else if ($('#parentcnfemail').val() == $('#user_email2').val() || $('#user_email1').val() == $('#user_email2').val()) {
-	                $(".user_email2-error").text('Enter different Email address');
-	                $("#user_email2").focus();
-	                $(".user_email2-error").css('display', 'block');
-	                error = 1;
-	            } else {
-	                if(allowedEmaildomain($('#user_email2').val()))
-	                {
-	                    $(".user_email2-error").hide();
-	                }
-	                else
-	                {
-	                    $(".user_email2-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
-	                    $("#user_email2").focus();
-	                    $(".user_email2-error").css('display', 'block');
-	                    error = 1;
-	                }
-	            }
-	            if (!$('#phone2').val()) {
-	                $(".phone2-error").css('display', 'block');
-	                $("#phone2").focus();
-	                error = 1;
-	            } else if (!validatePhone($('#phone2').val())) {
-	                $(".phone2-error").text('Please enter valid mobile number');
-	                $(".phone2-error").css('display', 'block');
-	                $("#phone2").focus();
-	                error = 1;
-	            } else {
-	                $(".phone2-error").hide();
-	            }
-				
-			}
+                if (!$('#first_name2').val()) {
+                    $(".first_name2-error").css('display', 'block');
+                    $("#first_name2").focus();
+                    error = 1;
+                } else {
+                    $(".first_name2-error").hide();
+                }
+
+                if (!$('#last_name2').val()) {
+                    $(".last_name2-error").css('display', 'block');
+                    $('#last_name2').focus()
+                    error = 1;
+                } else {
+                    $(".last_name2-error").hide();
+                }
+
+                if (!$('#user_email2').val()) {
+                    $(".user_email2-error").css('display', 'block');
+                    $("#user_email2").focus();
+                    error = 1;
+                } else if (!validateEmail($('#user_email2').val())) {
+                    $(".user_email2-error").text('Enter valid Email address');
+                    $("#user_email2").focus();
+                    $(".user_email2-error").css('display', 'block');
+                    error = 1;
+                } else if ($('#parentcnfemail').val() == $('#user_email2').val() || $('#user_email1').val() == $('#user_email2').val()) {
+                    $(".user_email2-error").text('Enter different Email address');
+                    $("#user_email2").focus();
+                    $(".user_email2-error").css('display', 'block');
+                    error = 1;
+                } else {
+                    if (allowedEmaildomain($('#user_email2').val())) {
+                        $(".user_email2-error").hide();
+                    } else {
+                        $(".user_email2-error").text('Please use a general email address with domain ending in .com, .net. or .edu');
+                        $("#user_email2").focus();
+                        $(".user_email2-error").css('display', 'block');
+                        error = 1;
+                    }
+                }
+                if (!$('#phone2').val()) {
+                    $(".phone2-error").css('display', 'block');
+                    $("#phone2").focus();
+                    error = 1;
+                } else if (!validatePhone($('#phone2').val())) {
+                    $(".phone2-error").text('Please enter valid mobile number');
+                    $(".phone2-error").css('display', 'block');
+                    $("#phone2").focus();
+                    error = 1;
+                } else {
+                    $(".phone2-error").hide();
+                }
+
+            }
 
             if (!$('#timezone').val() || $('#timezone').val() == 'NA') {
                 $(".timezone-error").css('display', 'block');
@@ -1030,37 +931,32 @@
                 $(".timezone-error").hide();
             }
 
-			if(user_lo == 1)
-			{
+            if (user_lo == 1) {
                 $(".user_login-error").css('display', 'block');
                 $('#user_login').focus()
                 error = 1;
-			}
+            }
 
-			if(parent_em == 1)
-			{
+            if (parent_em == 1) {
                 $(".parentemail-error").css('display', 'block');
                 $('#parentemail').focus()
                 error = 1;
-			}
+            }
 
-			if(user1_em == 1)
-			{
+            if (user1_em == 1) {
                 $(".user_email1-error").css('display', 'block');
                 $('#user_email1').focus()
                 error = 1;
-			}
-			
-			if(did == 2)
-			{
-        		var user2_em = $("#user_email2").attr("data-ref");
-				if(user2_em == 1)
-				{
-	                $(".user_email2-error").css('display', 'block');
-	                $('#user_email2').focus()
-	                error = 1;
-				}
-			}
+            }
+
+            if (did == 2) {
+                var user2_em = $("#user_email2").attr("data-ref");
+                if (user2_em == 1) {
+                    $(".user_email2-error").css('display', 'block');
+                    $('#user_email2').focus()
+                    error = 1;
+                }
+            }
 
 
             if (error == 0) {
@@ -1068,47 +964,47 @@
             } else {
                 return false;
             }
-            
-
-		});
-		
-
-		$('#add-stu').click(function(e) {
-			e.preventDefault();
-			
-			var did = $("#add-stu").attr("data-id");
-			if(did == 1)
-			{
-				$("#add-stu").attr("data-id",2);
-				$("#add-stu").html('<i class="fa fa-user-times" aria-hidden="true"></i>');
-				$("#stud2").css("display","block");
-				$('#stu1').collapse('hide');
-				$('#stu2').collapse("toggle");
-			}
-			else
-			{
-				$("#stu2 input").val("");
-	            $(".first_name2-error").hide();
-	            $(".last_name2-error").hide();
-	            $(".user_email2-error").hide();
-	            $(".phone2-error").hide();
-	            $(".phone2_msg").hide();
-
-				$("#add-stu").attr("data-id",1);
-				$("#add-stu").html('<i class="fa fa-user-plus" aria-hidden="true"></i>');
-				$("#stud2").css("display","none");
-				$('#stu2').collapse('hide');
-				$('#stu1').collapse("toggle");
-			}
-			
-		});
-   
-
-    });
+        });
 
 
+        $('#add-stu').click(function (e) {
+            e.preventDefault();
 
+            var did = $("#add-stu").attr("data-id");
+            if (did == 1) {
+                $("#add-stu").attr("data-id", 2);
+                $("#add-stu").html('<i class="fa fa-user-times" aria-hidden="true"></i>');
+                $("#stud2").css("display", "block");
+                $('#stu1').collapse('hide');
+                $('#stu2').collapse("toggle");
+            } else {
+                $("#stu2 input").val("");
+                $(".first_name2-error").hide();
+                $(".last_name2-error").hide();
+                $(".user_email2-error").hide();
+                $(".phone2-error").hide();
+                $(".phone2_msg").hide();
 
+                $("#add-stu").attr("data-id", 1);
+                $("#add-stu").html('<i class="fa fa-user-plus" aria-hidden="true"></i>');
+                $("#stud2").css("display", "none");
+                $('#stu2').collapse('hide');
+                $('#stu1').collapse("toggle");
+            }
+        });
 
+        /** Getting course purchase status **/
+        $('#bitlive_student_select').on('change', function () {
+            let ajaxurl = bitpp_data.ajaxurl;
+            let data = {
+                'action': 'course_purchase_status',
+                'student_id': $(this).val()
+            };
+            $.post(ajaxurl, data, function(response) {
+                console.log(response);
+            });
+        });
+
+    }); //document ready
 
 })(jQuery);

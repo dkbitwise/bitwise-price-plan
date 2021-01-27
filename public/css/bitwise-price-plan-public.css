@@ -117,3 +117,21 @@ background-color: #5591bb;
 #stud2 {
 	 display: none;
 }
+.bitlive-subject-heads {
+	font-weight: bold;
+	display: -webkit-inline-box;
+	position: relative;
+	left: 47%;
+}
+.bitlive-subject-heads .title.float-left{
+	font-size: 29px;
+	text-transform: uppercase;
+}
+.bitliive-student-select.float-right {
+	position: relative;
+	left: 100%;
+}
+.bitlive-subject-heads .select-label {
+	font-weight: 400;
+	font-size: 15px;
+}
