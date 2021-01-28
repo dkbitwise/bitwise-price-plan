@@ -993,15 +993,20 @@
             }
         });
 
-        /** Getting course purchase status **/
+        /** Changing button text and link based on course purchase status on live-courses page (Dinesh) **/
         $('#bitlive_student_select').on('change', function () {
             let ajaxurl = bitpp_data.ajaxurl;
             let data = {
                 'action': 'course_purchase_status',
                 'student_id': $(this).val()
             };
+            $('.bilive-modal').removeClass('bitlive-hide');
             $.post(ajaxurl, data, function(response) {
-                console.log(response);
+                for(let course_id in response ){
+                    $('.bitlve_course_link.bitlve_course_id_'+course_id).attr('href',response[course_id].link);
+                    $('.bitlve_course_link.bitlve_course_id_'+course_id).text(response[course_id].text);
+                }
+                $('.bilive-modal').addClass('bitlive-hide');
             });
         });
 

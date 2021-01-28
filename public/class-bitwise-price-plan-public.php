@@ -229,9 +229,7 @@ class Bitwise_Price_Plan_Public {
             </div>
 			<?php
 		}
-		$allcourses = $this->bitlive_get_all_lp_courses($student_id);
-
-		?>
+		$allcourses = $this->bitlive_get_all_lp_courses($student_id); ?>
 		</h2>
         <div id="thim-course-archive" class="thim-course-grid" data-cookie="grid-layout">
         <?php
@@ -250,11 +248,11 @@ class Bitwise_Price_Plan_Public {
 
 							<?php if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
                                 <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">ENROLL NOW</a>
                                 </div>
 							<?php } else { ?>
                                 <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <a href="<?php echo get_permalink( $available_course->ID ) . '?enroll-course=' . $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">GET STARTED</a>
+                                    <a href="<?php echo get_permalink( $available_course->ID ) ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">GET STARTED</a>
                                 </div>
 							<?php } ?>
                         </div>
@@ -291,11 +289,11 @@ class Bitwise_Price_Plan_Public {
                         <div class="course-meta">
 							<?php if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
                                 <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">ENROLL NOW</a>
                                 </div>
 							<?php } else { ?>
                                 <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">Get Started</a>
+                                    <a href="<?php echo get_permalink( $available_course->ID ) ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">GET STARTED</a>
                                 </div>
 							<?php } ?>
                         </div>
@@ -330,11 +328,11 @@ class Bitwise_Price_Plan_Public {
                         <div class="course-meta">
 							<?php if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
                                 <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">ENROLL NOW</a>
                                 </div>
 							<?php } else { ?>
                                 <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">Get Started</a>
+                                    <a href="<?php echo get_permalink( $available_course->ID ) ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">GET STARTED</a>
                                 </div>
 							<?php } ?>
                         </div>
@@ -368,11 +366,11 @@ class Bitwise_Price_Plan_Public {
 							<?php if ( isset( $allcourses ) ) {
 								if ( ! in_array( $available_course->ID, $allcourses ) || ! is_user_logged_in() ) { ?>
                                     <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                        <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">ENROLL NOW</a>
+                                        <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">ENROLL NOW</a>
                                     </div>
 								<?php } else { ?>
                                     <div class="course-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                        <a href="<?php echo site_url(); ?>/choose-package/?courseid=<?php echo $available_course->ID; ?>" class="btn btn-md btn-default sp-btn pull-right ml">Get Started</a>
+                                        <a href="<?php echo get_permalink( $available_course->ID ) ?>" class="btn btn-md btn-default sp-btn pull-right ml bitlve_course_link bitlve_course_id_<?php echo $available_course->ID ?>">GET STARTED</a>
                                     </div>
 								<?php }
 							} ?>
@@ -380,12 +378,14 @@ class Bitwise_Price_Plan_Public {
                     </div>
                 </div>
             </div>
+            <div class="bilive-modal bitlive-hide"><!-- Place at bottom of page --></div>
 		<?php }
 		echo '</div>';
+
 	}
 
 	/**
-     * Handle ajax request for course puachase status
+     * Handle ajax request for course purchase status
     */
     public function bookme_course_purchase_status(){
         global $wpdb;
@@ -394,7 +394,27 @@ class Bitwise_Price_Plan_Public {
 
         $student_courses = $this->bitlive_get_all_lp_courses($student_id);
 
-        wp_send_json($student_courses);
+        $mathids = array( '19096', '19104', '19098', '19100', '19102' );
+        $phyids  = array( '19113', '19115', '19117', '19119' );
+        $chmids  = array( '19107', '19109', '19111' );
+        $bioids  = array( '19092', '19094' );
+
+        $all_ids  = array_merge($mathids,$phyids, $chmids,$bioids);
+        $all_buttons = [];
+        foreach ($all_ids as $course_id){
+            if (in_array($course_id, $student_courses,true)){
+                $all_buttons[$course_id] = array(
+                 'text' => __('GET STARTED','bitwise-price-plan-public'),
+                 'link' => get_permalink($course_id),
+                );
+            }else{
+                $all_buttons[$course_id] = array(
+                 'text' => __('ENROLL NOW','bitwise-price-plan-public'),
+                 'link' => site_url().'/choose-package/?courseid='.$course_id,
+                );
+            }
+        }
+        wp_send_json($all_buttons);
     }
 
     /**
