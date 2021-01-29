@@ -159,6 +159,8 @@ class Bitwise_Price_Plan_Public {
   <ul style="left: -35px!important; padding: 0px 10px!important;" class="dropdown-menu sub-menu">
   	<?php
     $usr = wp_get_current_user();
+
+    $unread_cout = fep_get_user_message_count( 'unread' );
     if ( in_array( 'subscriber', (array) $usr->roles ) ) {
 	    ?>
         <!--<li><a href="/profile/">My Profile</a></li>-->
@@ -171,17 +173,25 @@ class Bitwise_Price_Plan_Public {
     <li><a href="<?php echo wp_logout_url( home_url() ); ?><?php echo wp_logout_url( home_url() ); ?><?php echo wp_logout_url( home_url() ); ?>">Logout</a></li>
   </ul>
 </li>
-        <li class="fepm-message-box">
-            <a class="messagebox-link" href="<?php echo esc_url( site_url() ) ?>/chat/?fepaction=messagebox"><i class="fa fa-bell"></i></a>
-        </li>
-    </ul>
-	<?php
+    <li class="fepm-message-box">
+        <a class="messagebox-link" href="<?php echo esc_url( site_url() ) ?>/chat/?fepaction=messagebox">
+            <i class="fa fa-bell"></i>
+            <?php if ($unread_cout > 0 ){ ?>
+                <span class="bitl-undread-msg"><?php echo esc_html($unread_cout);?></span>
+            <?php } ?>
+        </a>
+    </li>
+</ul>
+<?php
 }
 ?>
 </span>
-		<?php
+<?php
 	}
 
+	/**
+     * Shortcode for course page
+     */
 	public function bw_course_page() {
 		global $wpdb;
 
@@ -199,16 +209,16 @@ class Bitwise_Price_Plan_Public {
 		    <div class="title float-left"><span>Math</span></div>
 		<?php
 
-		/*** Getting all students of current loggin in parent  ***/
-		$bwlive_students            = $wpdb->prefix . 'bwlive_students';
-		$current_user = wp_get_current_user();
-		$user_roles   = $current_user->roles;
+		/*** Getting all students of current logging in parent  ***/
+		$bwlive_students = $wpdb->prefix . 'bwlive_students';
+		$current_user    = wp_get_current_user();
+		$user_roles      = $current_user->roles;
 		$student_id = 0;
 		if ( in_array( 'subscriber', $user_roles, true ) ) {
 		    $parent_id = $current_user->ID;
 			$student_details = $wpdb->get_results( "SELECT `student_fname`, `student_lname`, `student_id` FROM $bwlive_students WHERE `parent_id`='$parent_id'", ARRAY_A ); ?>
 			<div class="bitliive-student-select float-right">
-                <label class="select-label">Select Student</label>
+                <label class="select-label">Student Name</label>
                 <select id="bitlive_student_select">
                     <?php
                     if (count($student_details) > 0){
@@ -217,8 +227,7 @@ class Bitwise_Price_Plan_Public {
                             if ($count < 1){
                                 $student_id = $student_detail['student_id'];
                             }
-                            $count++;
-                            ?>
+                            $count++; ?>
                             <option value="<?php echo $student_detail['student_id']?>"><?php echo $student_detail['student_fname'].' '.$student_detail['student_lname'] ?></option>
                        <?php }
                     }else{ ?>
@@ -346,7 +355,6 @@ class Bitwise_Price_Plan_Public {
 			'post_status'     => 'publish',
 			'post_type'       => 'lp_course',
 			'course_category' => 'Biology',
-
 			'post__in'       => $bioids, //pass our own post ids to display updated by suresh
 			'orderby'        => 'date',
 			'posts_per_page' => '-1'
@@ -381,16 +389,14 @@ class Bitwise_Price_Plan_Public {
             <div class="bilive-modal bitlive-hide"><!-- Place at bottom of page --></div>
 		<?php }
 		echo '</div>';
-
 	}
 
 	/**
      * Handle ajax request for course purchase status
     */
     public function bookme_course_purchase_status(){
-        global $wpdb;
         $posted_data = isset($_POST)?wc_clean($_POST):[];
-        $student_id = $posted_data['student_id'];
+        $student_id  = $posted_data['student_id'];
 
         $student_courses = $this->bitlive_get_all_lp_courses($student_id);
 
@@ -407,7 +413,7 @@ class Bitwise_Price_Plan_Public {
                  'text' => __('GET STARTED','bitwise-price-plan-public'),
                  'link' => get_permalink($course_id),
                 );
-            }else{
+            } else{
                 $all_buttons[$course_id] = array(
                  'text' => __('ENROLL NOW','bitwise-price-plan-public'),
                  'link' => site_url().'/choose-package/?courseid='.$course_id,
@@ -451,6 +457,9 @@ class Bitwise_Price_Plan_Public {
 		return $allcourses;
     }
 
+    /**
+    * @return int[]|WP_Post[]
+    */
     public function bitlive_get_all_customer_orders(){
         return get_posts( array(
 			'numberposts' => - 1,

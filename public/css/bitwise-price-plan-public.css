@@ -163,3 +163,13 @@ body.loading .bilive-modal {
 .bitlive-hide{
 	display: none;
 }
+.toolbar-container .messagebox-link .bitl-undread-msg {
+	color: #fff;
+	border: 1px solid;
+	background: red;
+	border-radius: 20px;
+	padding: 1px 7px 0px 6px;
+	position: relative;
+	top: -25px;
+	left: 65%;
+}
